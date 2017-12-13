@@ -179,4 +179,4 @@ instant_pkgs(pkgs)
 
 
 ##### Housekeeping ####
-rm(pkgs)
+rm(pkgs, instant_pkgs)
