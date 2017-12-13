@@ -242,7 +242,7 @@ wdn09 <- read.dta13(file.path(getwd(), 'WDN1&WDN2_stata13.dta')) %>%
          # 1 if firm participated to both waves, 0 otherwise
          flag,
          # % total wage bill related to bonuses
-         C_5,
+         C_5a,
          # logical: inflation indexed wages?
          C_6,
          # wages indexed to past infl?

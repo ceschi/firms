@@ -7,6 +7,7 @@
 *.xls
 *.csv
 *.pper
+*.RData
 
 ## File:    .gitignore
 ## Purpose: Specifies untracked files for git to ignore 
