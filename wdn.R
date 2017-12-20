@@ -522,17 +522,245 @@ wdn09 <- read.dta13(file.path(getwd(), 'WDN1&WDN2_stata13.dta')) %>%
          DNC_49h,
          # unique firm identifier by country
          firm_id
-  )
+  ) %>% rename(C_5a=C_5)
+
+##### Third wave of WDN: 2010-13 #####
+
+wdn13 <- read.dta13(file.path(getwd(), 'WDN_external_12.dta')) %>% 
+  as.tibble() %>% 
+  select(country,
+         sector,
+         size,
+         # multi or single establishment?
+         structure,
+         # unique firm identifier by country
+         firm_id,
+         # change in demand
+         c2_1a,
+         # change in external financing
+         c2_1c,
+         # persistence of demand change
+         c2_2a,
+         # persistence of external financing change
+         c2_2c,
+         # credit availability to finance working capital
+         c2_3a,
+         # credit availability to finance investments
+         c2_3b,
+         # credit availability to refinance debt
+         c2_3c,
+         # credit available for working capital but costly
+         c2_3d,
+         # credit available for investment but costly
+         c2_3e,
+         # credit available for debt but costly
+         c2_3f,
+         # change in total cost
+         c2_4a,
+         # change in labour cost
+         c2_4b,
+         # change in financing cost
+         c2_4c,
+         # change in supplies cost
+         c2_4d,
+         # change in other costs
+         c2_4e,
+         # change in base wage
+         c2_5a,
+         # change in flex wage
+         c2_5b,
+         # change in number of permanent workers
+         c2_5c,
+         # change in number of temporary workers
+         c2_5d,
+         # change in number of agency workers
+         c2_5e,
+         # change in working hours per worker
+         c2_5f,
+         # change in other labour costs
+         c2_5g,
+         # change in domestic demand
+         c2_6a,
+         # change in foreign demand
+         c2_6b,
+         # change in domestic price
+         c2_6c,
+         # change in foreign price
+         c2_6d,
+         # change in avg labour productivity
+         nc2_7a,
+         # change in prices
+         nc2_7b,
+         # negative demand shock in 2010?
+         nc2_9a_1,
+         # negative demand shock in 2011?
+         nc2_9a_2,
+         # negative demand shock in 2012?
+         nc2_9a_3,
+         # negative demand shock in 2013?
+         nc2_9a_4,
+         # no negative demand shock
+         nc2_9a_5,
+         # negative financing shock in 2010?
+         nc2_9c_1,
+         # negative financing shock in 2011?
+         nc2_9c_2,
+         # negative financing shock in 2012?
+         nc2_9c_3,
+         # negative financing shock in 2013?
+         nc2_9c_4,
+         # no negative financing shock
+         nc2_9c_5,
+         # share of permanent full time workers
+         c3_1b_share,
+         # share of permanent part time workers
+         c3_1c_share,
+         # share of temporary workers
+         c3_1d_share,
+         # share of low skill manual workers
+         c3_2d,
+         # share of low skill non manual workers
+         c3_2b,
+         # share of high skill manual workers
+         c3_2c,
+         # share of high skill non manual workers
+         c3_2a,
+         # need to reduce or change composition of labour force?
+         c3_3a,
+         # mass layoffs
+         c3_3b_1,
+         # individual layoffs
+         c3_3b_2,
+         # temporary layoffs
+         c3_3b_3,
+         # subsidised cut in hours worked
+         c3_3b_4,
+         # non-subsidised cut in hours worked
+         c3_3b_5,
+         # non-renawal of temporary jobs
+         c3_3b_6,
+         # early retirement
+         c3_3b_7,
+         # freeze or cut in new hires
+         c3_3b_8,
+         # reduction in agency workers
+         c3_3b_9,
+         # difficulty to layoff collectively for econ reason
+         c3_4a,
+         # difficulty to layoff individually for econ reason
+         c3_4b,
+         # difficulty to layoff for discipline
+         c3_4c,
+         # difficulty to layoff temporarily for econ reason
+         c3_4d,
+         # difficulty to hire
+         c3_4e,
+         # difficulty to change working hours
+         c3_4f,
+         # difficulty to move workers to other locations
+         c3_4g,
+         # difficulty to move workers across jobs
+         c3_4h,
+         # difficulty to change wage of incumbent workers
+         c3_4i,
+         # difficulty to lower new hires' wage
+         c3_4j,
+         # difficulty to mass layoff due to
+         nc3_4b_1,
+         # difficulty to indiv layoff due to
+         nc3_4b_2,
+         # relevant for hiring: economic uncertainty
+         c3_5a,
+         # relevant for hiring: lack of skills supply
+         c3_5b,
+         # relevant for hiring: financing access
+         c3_5c,
+         # relevant for hiring: firing cost
+         c3_5d,
+         # relevant for hiring: hiring cost
+         c3_5e,
+         # relevant for hiring: payroll taxes
+         c3_5f,
+         # relevant for hiring: high wages
+         c3_5g,
+         # relevant for hiring: law uncertainty
+         c3_5h,
+         # relevant for hiring: costs of inputs complementary to labour
+         c3_5i,
+         # relevant for hiring: other
+         c3_5j,
+         # worker flow 2013 vs 2010
+         nc3_6a,
+         # reason of worker flow change
+         nc3_6b,
+         # share of labour cost in total costs
+         c4_1,
+         # share of bonuses in total wage bill
+         c4_2,
+         # frequency of base wage change in 10-13
+         c4_6b,
+         # frequency of base wage change in before 2010
+         c4_6a,
+         # were base wages frozen in 2010-13
+         c4_7a,
+         # frozen in 2010
+         c4_7a_1,
+         # frozen in 2011
+         c4_7a_2,
+         # frozen in 2012
+         c4_7a_3,
+         # frozen in 2013
+         c4_7a_4,
+         # % of workers affected by wage freeze in 2010
+         c4_7a_5,
+         # % of workers affected by wage freeze in 2011
+         c4_7a_6,
+         # % of workers affected by wage freeze in 2012
+         c4_7a_7,
+         # % of workers affected by wage freeze in 2013
+         c4_7a_8,
+         # were base wages cut in 2010-13
+         c4_7b,
+         # cut in 2010
+         c4_7b_1,
+         # cut in 2011
+         c4_7b_2,
+         # cut in 2012
+         c4_7b_3,
+         # cut in 2013
+         c4_7b_4,
+         # avg cut in 2010
+         c4_7b_5,
+         # avg cut in 2011
+         c4_7b_6,
+         # avg cut in 2012
+         c4_7b_7,
+         # avg cut in 2013
+         c4_7b_8,
+         # % of workers affected by wage cut in 2010
+         c4_7b_9,
+         # % of workers affected by wage cut in 2011
+         c4_7b_10,
+         # % of workers affected by wage cut in 2012
+         c4_7b_11,
+         # % of workers affected by wage cut in 2013
+         c4_7b_12,
+         nc4_8b nc4_8a nc5_1a nc5_1b nc5_2a nc5_2b nc5_3 nc5_3a_1 nc5_3a_2 nc5_3a_3 nc5_3a_4 nc5_3a_5 nc5_3a_6 nc5_3b_1 nc5_3b_2 nc5_3b_3 nc5_3b_4 nc5_3b_5 nc5_3b_6 nc5_6b
+  ) 
 
 
 
 
 
+##### Aggregation and processing #####
 
-
-
-
-
+# Roadmap:
+  # - homogeneous var name + NAs
+  #     - optionally create list with var description
+  # - conversion to boolean and size classes
+  # - aggregate up to industry -> size class
+  # - variable transformation to match CompNet structure
+  # - add year and merge with compnet
 
 
 
