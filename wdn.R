@@ -745,7 +745,46 @@ wdn13 <- read.dta13(file.path(getwd(), 'WDN_external_12.dta')) %>%
          c4_7b_11,
          # % of workers affected by wage cut in 2013
          c4_7b_12,
-         nc4_8b nc4_8a nc5_1a nc5_1b nc5_2a nc5_2b nc5_3 nc5_3a_1 nc5_3a_2 nc5_3a_3 nc5_3a_4 nc5_3a_5 nc5_3a_6 nc5_3b_1 nc5_3b_2 nc5_3b_3 nc5_3b_4 nc5_3b_5 nc5_3b_6 nc5_6b
+         # labour of new hires vs old workers in 2010-3
+         nc4_8b,
+         # labour of new hires vs old workers before 2010
+         nc4_8a,
+         # domestic price setting
+         nc5_1a,
+         # foreign price setting
+         nc5_1b,
+         # share of revenues from domestic mkt
+         nc5_2a,
+         # share of revenues from foreign mkt
+         nc5_2b,
+         # changes in the frequency of price setting frequency in 2010-13?
+         nc5_3,
+         # price changes more frequently: volatile demand
+         nc5_3a_1,
+         # price changes more frequently: changes in labour cost
+         nc5_3a_2,
+         # price changes more frequently: changes in input costs
+         nc5_3a_3,
+         # price changes more frequently: stronger competition
+         nc5_3a_4,
+         # price changes more frequently: competitors change price
+         nc5_3a_5,
+         # price changes more frequently: boh
+         nc5_3a_6,
+         # price changes less frequently: less volatile demand
+         nc5_3b_1,
+         # price changes less frequently: less freq changes in labour cost
+         nc5_3b_2,
+         # price changes less frequently: less freq changes in input cost
+         nc5_3b_3,
+         # price changes less frequently: weaker competition
+         nc5_3b_4,
+         # price changes less frequently: competitors change price less freq
+         nc5_3b_5,
+         # price changes less frequently: boh
+         nc5_3b_6,
+         # freq of changing price: whenever conditions change
+         nc5_6b
   ) 
 
 
