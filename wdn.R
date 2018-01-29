@@ -8,11 +8,13 @@
 # read in data from dta, select variables,
 # convert and add year info
 
-wdn07 <- read.dta13(file.path(getwd(), 'WDN_Survey13_fullyharmonized.dta')) %>% 
+wdn07 <- read.dta13(file.path(getwd(), 'WDN_Survey13_fullyharmonized.dta'), nonint.factors=T) %>% 
   as.tibble() %>% 
   select(country,
          sector,
          size,
+         # unique firm identifier by country
+         firm_id,
          # % total wage bill related to bonuses
          C_5,
          # logical: inflation indexed wages?
@@ -225,22 +227,22 @@ wdn07 <- read.dta13(file.path(getwd(), 'WDN_Survey13_fullyharmonized.dta')) %>%
          # % of tot cost due to lab costs
          NC_40,
          # firm revenues this year with respect to last year
-         NC_41,
-         # unique firm identifier by country
-         firm_id
+         NC_41
          )
 
 
 
 ##### Second wave of WDN: 2009 #####
 
-wdn09 <- read.dta13(file.path(getwd(), 'WDN1&WDN2_stata13.dta')) %>% 
+wdn09 <- read.dta13(file.path(getwd(), 'WDN1&WDN2_stata13.dta'), nonint.factors=T) %>% 
   as.tibble() %>% 
   select(country,
          sector,
          size,
          # 1 if firm participated to both waves, 0 otherwise
          flag,
+         # unique firm identifier by country
+         firm_id,
          # % total wage bill related to bonuses
          C_5a,
          # logical: inflation indexed wages?
@@ -519,14 +521,12 @@ wdn09 <- read.dta13(file.path(getwd(), 'WDN1&WDN2_stata13.dta')) %>%
          # implicit agreement with workers
          DNC_49g,
          # workers compare wages across firms
-         DNC_49h,
-         # unique firm identifier by country
-         firm_id
-  ) %>% rename(C_5a=C_5)
+         DNC_49h
+  ) %>% mutate(C_5=C_5a) %>% mutate(C_5a=NULL)
 
 ##### Third wave of WDN: 2010-13 #####
 
-wdn13 <- read.dta13(file.path(getwd(), 'WDN_external_12.dta')) %>% 
+wdn13 <- read.dta13(file.path(getwd(), 'WDN_external_12.dta'), nonint.factors=T) %>% 
   as.tibble() %>% 
   select(country,
          sector,
@@ -786,6 +786,11 @@ wdn13 <- read.dta13(file.path(getwd(), 'WDN_external_12.dta')) %>%
          # freq of changing price: whenever conditions change
          nc5_6b
   ) 
+
+##### Refactoring data #####
+
+# replace all no/yes with 0/1s
+
 
 
 

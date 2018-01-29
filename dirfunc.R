@@ -3,7 +3,7 @@
 ##### Packages #####
 
 pkgs <- c('readstata13', 'tidyverse',
-          'ggridges', 'lubridate')
+          'ggridges', 'lubridate', 'plm')
 
 
 ##### Directories, setting and creating #####
