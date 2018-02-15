@@ -21,7 +21,8 @@
 # prefixes:
 #   g_ - growth rate of such variable
 
-
+#### Setting up the environment #####
+source('dirfunc.R')
 
 
 #### Importing and tidying EU data ####
@@ -44,7 +45,8 @@ source('d_ind_all.r')
 
 ##### Scraping and tidying QCEW data ####
 
-
+##### Import WDN data #####
+source('wdn.R')
 
 
 
@@ -91,29 +93,3 @@ source('plotggsave.r')
 # 
 # plot_macsec_20e <- ggplot(descriptive_macsec, aes(y=absconstrained, x=year, colour=country))+geom_point()+
 #  facet_grid(.~mac_sector)+theme_bw()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
