@@ -12,6 +12,7 @@ graphs_dir <- file.path(getwd(), 'Plots')
 data_dir <- file.path(getwd(), 'Downloaded files')
 dir.create(graphs_dir)
 dir.create(data_dir)
+working <- getwd()
 
 
 ##### Functions #####

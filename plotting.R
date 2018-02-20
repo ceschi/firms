@@ -82,3 +82,13 @@ plot_fingap
 plot_mac <- ggplot(d_ind_all, aes(x=year, y=mac_rel_share, colour=as.factor(szclass), group=country))+
   geom_line(size=1)+facet_wrap(country~mac_sector, scales='free_y')+theme_bw()
 plot_mac
+
+
+# Sectoral, country average collateral levels
+plot_sec_collateral_mean <- ggplot(data=d_ind_all %>%
+                                     group_by(year, mac_sector, szclass) %>% 
+                                     summarise(collateral_mean2=collateral_mean %>% na.omit(.) %>% mean()),
+                                   aes(x=year, y=collateral_mean2, colour=as.factor(szclass)))+
+        geom_line(size=1)+facet_wrap(~mac_sector, scales='free_y')+theme_bw()+ylab('Collateral %')+xlab('Year')+
+        ggtitle('Collateral mean by sector')+labs(colour='Size class')
+plot_sec_collateral_mean

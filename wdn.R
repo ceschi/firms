@@ -798,6 +798,12 @@ wdn13 <- read.dta13(file.path(getwd(), 'WDN_external_12.dta'), nonint.factors=T)
 
 ##### Aggregation and processing #####
 
+wdn_list <- list(wdn07,
+                 wdn09,
+                 wdn13)
+
+rm(wdn07, wdn09, wdn13)
+
 # Roadmap:
   # - homogeneous var name + NAs
   #     - optionally create list with var description

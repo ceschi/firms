@@ -662,6 +662,15 @@ d_ind_all$country_ind_rel_share <- d_ind_all$l_count/d_ind_all$country_ind_tot_c
 # d_size_all <- d_size_all %>% mutate(lc_l_mean_norm=lc_l_mean/lc_l_mean_init)
 
 
+# creates variable averaging over contries within same year, sector, size class
+# the values for collaterals
+# d_ind_all <- left_join(d_ind_all,
+#                        d_ind_all %>% 
+#                           group_by(year, mac_sector, szclass) %>% 
+#                           summarise(collateral_mean_macsec=collateral_mean %>% na.omit(.) %>% mean()),
+#                        by=c('year', 'mac_sector', 'szclass'))
+
+
 #### Housekeeping ####
 
 rm(d_ind_all_2012, add_info)
