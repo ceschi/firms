@@ -4,8 +4,35 @@
 # this dataset is good for less aggregated, sophisticated investigation
 
 
+###### Full DB import #####
+
+# 5th
+full_ind <- read.dta13(file.path(working, 'descriptive_all_countries_macsec_szclass_all.dta')) %>%  as_tibble()
+
+# 4th
+full_ind_2012 <- read.dta13(file.path(working, 'descriptive_all_countries_macsec_szclass_all_2012.dta')) %>%  as_tibble() %>% 
+  select(-WW_count, -WW, -DIV_min, -cash_flow_ta_min, -cash_holdings_min, -collateral_min, 
+         -debt_burd_min, -depr_k_min, -equity_debt_min, -equity_ratio_min, -financial_gap_min, 
+         -g_DIV_min, -g_cash_flow_ta_min, -g_cash_holdings_min, -g_collateral_min, -g_debt_burd_min, 
+         -g_depr_k_min, -g_equity_debt_min, -g_equity_ratio_min, -g_financial_gap_min, -g_implicit_rate_min, 
+         -g_inv_turnover_min, -g_invest_ratio_min, -g_kprod_min, -g_l_min, -g_lc_l_min, -g_lc_min,
+         -g_leverage_min, -g_lprod_min, -g_lprod_rev_min, -g_mrpk_min, -g_mrpl_min, -g_profitmargin_min,
+         -g_rk_l_min, -g_rk_min, -g_roa_min, -g_rturnover_min, -g_rva_min, -g_tfp_min, -g_trade_credit_min,
+         -g_trade_debt_min, -g_ulc_min, -g_wageshare_min, -implicit_rate_min, -inv_turnover_min,
+         -invest_ratio_min, -kprod_min, -l_min, -lc_l_min, -lc_min, -leverage_min, -lprod_min, -lprod_rev_min,
+         -mrpk_min, -mrpl_min, -profitmargin_min, -rk_l_min, -rk_min, -roa_min, -rturnover_min, -rva_min,
+         -tfp_min, -trade_credit_min, -trade_debt_min, -ulc_min, -wageshare_min)
+
+# setdiff(names(full_ind_2012), names(full_ind)) -> list of vars missing in full_ind that are present in full_ind_2012
+
+# diffing and sorting
+new_info <- anti_join(full_ind_2012, full_ind, c('country', 'mac_sector', 'szclass', 'year'))
+full_ind <- rbind(full_ind, new_info) %>% arrange(., country, mac_sector, szclass, year)
+
+##### Selected vars ##### 
+
 # First dataset, 5th release
-d_ind_all <- read.dta13(file.path(working, 'descriptive_all_countries_macsec_szclass_all.dta')) %>%  as_tibble() %>% 
+d_ind_all <- full_in %>% 
   select(country, 
          mac_sector,    # NACE2 industry
          szclass,       # size class
@@ -673,7 +700,7 @@ d_ind_all$country_ind_rel_share <- d_ind_all$l_count/d_ind_all$country_ind_tot_c
 
 #### Housekeeping ####
 
-rm(d_ind_all_2012, add_info)
+rm(d_ind_all_2012, add_info, new_info)
 
 
 

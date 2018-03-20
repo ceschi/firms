@@ -66,3 +66,15 @@ ggsave(filename='Financial gap.pdf',
        path=graphs_dir,
        device='pdf',
        height=8, width=14.6, units='in')
+
+ggsave(filename='Sectoral collateral means.pdf',
+       plot=plot_sec_collateral_mean,
+       path=graphs_dir,
+       device='pdf',
+       height=8, width=14.6, units='in')
+
+ggsave(filename='Sectoral ULC means.pdf',
+       plot=plot_sec_ULC_mean,
+       path=graphs_dir,
+       device='pdf',
+       height=8, width=14.6, units='in')

@@ -92,3 +92,21 @@ plot_sec_collateral_mean <- ggplot(data=d_ind_all %>%
         geom_line(size=1)+facet_wrap(~mac_sector, scales='free_y')+theme_bw()+ylab('Collateral %')+xlab('Year')+
         ggtitle('Collateral mean by sector')+labs(colour='Size class')
 plot_sec_collateral_mean
+
+# Sectoral, country average ULC levels
+plot_sec_ULC_mean <- ggplot(data=d_ind_all %>%
+                                     group_by(year, mac_sector, szclass) %>% 
+                                     summarise(ulc_mean2 = ulc_mean %>% na.omit(.) %>% mean()),
+                                   aes(x=year, y=ulc_mean2, colour=as.factor(szclass)))+
+  geom_line(size=1)+facet_wrap(~mac_sector, scales='free_y')+theme_bw()+ylab('ULC')+xlab('Year')+
+  ggtitle('ULC mean by sector, all countries')+labs(colour='Size class')
+plot_sec_ULC_mean
+
+
+
+
+# ideal plot structure: use ggridges to visualise the
+# the evolution of percentiles over time, by sector and
+# by size of firm. Optionally also by country.
+# This could be performed on a variety of indexes such as
+# ULC, LC, L, constraints (SAFE, abconstrain), and others.

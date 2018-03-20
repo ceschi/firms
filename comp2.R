@@ -49,6 +49,9 @@ source('d_ind_all.r')
 source('wdn.R')
 
 
+##### Exploratory panel regressions #####
+#source('ekn_expl.R')
+
 
 #### Visualization: first set of graphs to explore ####
 source('plotting.R')
@@ -57,39 +60,3 @@ source('plotting.R')
 
 #### Saving plots ####
 source('plotggsave.r')
-
-
-
-#### CODE TRASH BIN ####
-
-
-# plot_sz_rel_emp <- ggplot(d_size_all, aes(y=d_size_all %>% group_by(country, year) %>% 
-#                                             
-#                                             x=year, colour=country))
-#                   +geom_line(size=1)+facet_grid(.~szclass)+theme_bw()
-# 
-# print(plot_size_emp_20e);print(plot_size_emp_all); print(plot_sz_rel_emp)
-# 
-# 
-# plot_avg_sectsize <- ggplot(data=d_ind_all %>% group_by(country,mac_sector,year) %>%
-#                               summarise(avg_size=sum(szclass*l_count)/sum(l_count)),
-#                             aes(x=year, y=avg_size))+geom_line(size=1, colour='blue') + theme_bw()+facet_wrap(~mac_sector)
-# plot_avg_sectsize
-# 
-# 
-# plot_avg_sz1 <- ggplot(data=d_size_all %>% group_by(country, year) %>% 
-#                         subset(szclass==3) %>% 
-#                         summarise(avg_size=sum(l_count)),
-#                         aes(x=year, y=avg_size))+geom_line(size=1, colour='blue') + theme_bw()+facet_wrap(~country)#+stat_smooth()
-# plot_avg_sz1
-
-# # older graphs
-# 
-# plot_size_emp_20e <- ggplot(descriptive_size_20e, aes(y=log(tot_l), x=year, colour=country))+
-#   geom_line(size=1)+facet_grid(.~szclass)+theme_bw()
-# 
-# plot_size_emp_all <- ggplot(d_size_all, aes(y=log(tot_l), x=year, colour=country))+
-#   geom_line(size=1)+facet_grid(.~szclass)+theme_bw()
-# 
-# plot_macsec_20e <- ggplot(descriptive_macsec, aes(y=absconstrained, x=year, colour=country))+geom_point()+
-#  facet_grid(.~mac_sector)+theme_bw()
