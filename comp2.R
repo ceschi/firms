@@ -32,16 +32,41 @@ source('d_size_all.r')
 # data present the full sample at a country-size-class level of aggregation, no industry involved
 # this dataset is good for aggregated, preliminary investigation
 # Produces also relative shares of employment by firm size and
-# relative shares of firms' population by size
+# relative shares of firms' population by size.
+# Creates also a richer dataset called full_descr that shall be
+# used for sake of simplicity
 
 
 source('d_ind_all.r')
 # picks 'descriptive_all_countries_macsec_szclass_all.dta' and imports selected columns,
 # data present the full sample at a country-size-class-NACE2 industry level of aggregation, 
 # this dataset is good for less aggregated, sophisticated investigation
+# Creates also a richer dataset called full_ind that shall be
+# used for sake of simplicity
 
 # !!!!!! Add conversion of year column to date
 # !!!!!! Add relative vars in d_ind_all dataset
+
+
+### Vars names without pre- or suffixes
+var_list <- list(descr = full_descr%>% 
+                   select(-contains('_p'), 
+                          -contains('_count'), 
+                          -contains('_skew'), 
+                          -contains('_sd'), 
+                          -contains('_iqr'), 
+                          -contains('_ow'), 
+                          -starts_with('g_')) %>%
+                   names(),
+                 ind =  full_ind %>% 
+                          select(-contains('_p'), 
+                          -contains('_count'), 
+                          -contains('_skew'), 
+                          -contains('_sd'), 
+                          -contains('_iqr'), 
+                          -contains('_ow'), 
+                          -starts_with('g_')) %>%
+                          names())
 
 ##### Scraping and tidying QCEW data ####
 

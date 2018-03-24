@@ -70,7 +70,7 @@ plot_absconstr <- ggplot(d_size_all, aes(x=year, y=absconstrained, colour=as.fac
 plot_absconstr
 
 # Financial gap
-plot_fingap <- ggplot(d_size_all, aes(x=year, y=financial_gap_mean, colour=as.factor(szclass)))+
+plot_fingap <- ggplot(d_size_all, aes(x=year,y=financial_gap_mean, colour=as.factor(szclass)))+
   geom_line(size=1)+facet_wrap(~country, scales='free_y')+theme_bw()+labs(colour='Size class')+theme(legend.position=c(.68,.07))+
   guides(colour=guide_legend(nrow=1, byrow = T))+ylab('Financial gap')+xlab('Year')+
   ggtitle('')
@@ -102,6 +102,7 @@ plot_sec_ULC_mean <- ggplot(data=d_ind_all %>%
   ggtitle('ULC mean by sector, all countries')+labs(colour='Size class')
 plot_sec_ULC_mean
 
+# sectoral QUALCOSA PER FAVORE!!
 
 
 
