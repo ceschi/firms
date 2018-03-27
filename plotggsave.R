@@ -78,3 +78,9 @@ ggsave(filename='Sectoral ULC means.pdf',
        path=graphs_dir,
        device='pdf',
        height=8, width=14.6, units='in')
+
+ggsave(filename='Sectoral fingap means.pdf',
+       plot=plot_sec_fingap,
+       path=graphs_dir,
+       device='pdf',
+       height=8, width=14.6, units='in')

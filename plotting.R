@@ -102,7 +102,15 @@ plot_sec_ULC_mean <- ggplot(data=d_ind_all %>%
   ggtitle('ULC mean by sector, all countries')+labs(colour='Size class')
 plot_sec_ULC_mean
 
-# sectoral QUALCOSA PER FAVORE!!
+# sectoral financial gap evolution, crosscountry
+plot_sec_fingap <- ggplot(full_ind %>% 
+                            group_by(year, mac_sector, szclass) %>% 
+                            summarise(financial_gap_crosscountry=wageshare_mean %>% na.omit(.) %>% mean()), 
+                          aes(x=year,y=financial_gap_crosscountry, colour=as.factor(szclass)))+
+  geom_line(size=1)+facet_wrap(~mac_sector, scales='free_y')+theme_bw()+labs(colour='Size class')+theme(legend.position='bottom')+
+  guides(colour=guide_legend(nrow=1, byrow = T))+ylab('Financial gap')+xlab('Year')+
+  ggtitle('')
+plot_sec_fingap
 
 
 

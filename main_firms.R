@@ -51,22 +51,24 @@ source('d_ind_all.r')
 ### Vars names without pre- or suffixes
 var_list <- list(descr = full_descr%>% 
                    select(-contains('_p'), 
-                          -contains('_count'), 
-                          -contains('_skew'), 
-                          -contains('_sd'), 
-                          -contains('_iqr'), 
-                          -contains('_ow'), 
+                          -ends_with('_count'), 
+                          -ends_with('_skew'), 
+                          -ends_with('_sd'), 
+                          -ends_with('_iqr'), 
+                          -ends_with('_ow'), 
                           -starts_with('g_')) %>%
-                   names(),
+                   names() %>% 
+                   sort(),
                  ind =  full_ind %>% 
-                          select(-contains('_p'), 
-                          -contains('_count'), 
-                          -contains('_skew'), 
-                          -contains('_sd'), 
-                          -contains('_iqr'), 
-                          -contains('_ow'), 
+                        select(-contains('_p'), 
+                          -ends_with('_count'), 
+                          -ends_with('_skew'), 
+                          -ends_with('_sd'), 
+                          -ends_with('_iqr'), 
+                          -ends_with('_ow'), 
                           -starts_with('g_')) %>%
-                          names())
+                        names() %>% 
+                        sort())
 
 ##### Scraping and tidying QCEW data ####
 
