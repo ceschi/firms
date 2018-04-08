@@ -171,9 +171,14 @@ qcew_data_single <- function(data_dir){
     # problem with this data is that we loose entirely the
     # size dimension of the observations.
     # Data by industry might provide more suitability.
+    
+    
+    # remove csv file
+    file.remove(file.path(data_dir, paste0(i, file_path)))
   }
 
   return(out_db)
+  write.table(out_db, file = file.path(data.dir, 'datamonster.csv'), sep = ',')
 }
 
 
