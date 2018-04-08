@@ -54,7 +54,7 @@ instant_pkgs <- function(pkgs) {
   }
 }
 
-qcew_data_single <- function(data_dir, graphs_dir){
+qcew_data_single <- function(data_dir){
   # custom function to download,
   # select and merge QCEW data
 
