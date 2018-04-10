@@ -112,6 +112,24 @@ plot_sec_fingap <- ggplot(full_ind %>%
   ggtitle('')
 plot_sec_fingap
 
+plot_sec_lprod <- ggplot(full_ind %>% 
+                           group_by(year, mac_sector, szclass) %>% 
+                           summarise(avg_lprod=lprod_mean %>% na.omit(.) %>% mean()),
+                         aes(x=year, y=avg_lprod, colour=as.factor(szclass)))+
+  geom_line(size=1)+facet_wrap(~mac_sector, scales='free_y')+theme_bw()+labs(colour='Size class')+theme(legend.position='bottom')+
+  guides(colour=guide_legend(nrow=1, byrow=T))+ylab('Labour productivity')+xlab('Year')+
+  ggtitle('Labour prod. by sector, cross-country means within size classes')
+plot_sec_lprod
+
+
+plot_country_lprod <- ggplot(full_ind %>% 
+                               group_by(year, mac_sector, szclass) %>% 
+                               summarise(avg_lprod=lprod_mean %>% na.omit(.) %>% mean()),
+                             aes(x=year, y=avg_lprod, colour=as.factor(szclass)))+
+  geom_line(size=1)+facet_wrap(~mac_sector, scales='free_y')+theme_bw()+labs(colour='Size class')+theme(legend.position='bottom')+
+  guides(colour=guide_legend(nrow=1, byrow=T))+ylab('Labour productivity')+xlab('Year')+
+  ggtitle('Labour prod. by sector, cross-country means within size classes')
+plot_country_lprod
 
 
 # ideal plot structure: use ggridges to visualise the

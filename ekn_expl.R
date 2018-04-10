@@ -15,6 +15,8 @@
 # cash flow. The intercept is omitted so to let other
 # controls absorb heterogeneity.
 
+
+##### ULC #####
 ols_simple_ulc_fingap <- lm(data=full_ind, 
                  formula = ulc_mean ~ 0 + as.factor(szclass) + lprod_mean + 
                    financial_gap_mean + 
@@ -66,6 +68,56 @@ ols_simple_ulc_lev <- lm(data = full_ind,
                          as.factor(year) + country + mac_sector)
 
 
+##### LC_L #####
+ols_simple_lc_l_fingap <- lm(data=full_ind, 
+                            formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                              financial_gap_mean + 
+                              as.factor(year) + country + mac_sector)
+
+ols_simple_lc_l_coll <- lm(data = full_ind,
+                          formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                            collateral_mean + 
+                            as.factor(year) + country + mac_sector)
+
+ols_simple_lc_l_absc <- lm(data = full_ind,
+                          formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                            absconstrained + 
+                            as.factor(year) + country + mac_sector)
+
+ols_simple_lc_l_cashfl <- lm(data = full_ind,
+                            formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                              cash_flow_ta_mean + 
+                              as.factor(year) + country + mac_sector)
+
+ols_simple_lc_l_cashhl <- lm(data = full_ind,
+                            formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                              cash_holdings_mean + 
+                              as.factor(year) + country + mac_sector)
+
+ols_simple_lc_l_debt <- lm(data = full_ind,
+                          formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                            debt_burd_mean + 
+                            as.factor(year) + country + mac_sector)
+
+ols_simple_lc_l_eqdebt <- lm(data = full_ind,
+                            formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                              equity_debt_mean + 
+                              as.factor(year) + country + mac_sector)
+
+ols_simple_lc_l_eqrat <- lm(data = full_ind,
+                           formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                             equity_ratio_mean + 
+                             as.factor(year) + country + mac_sector)
+
+ols_simple_lc_l_r <- lm(data = full_ind,
+                       formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                         implicit_rate_mean + 
+                         as.factor(year) + country + mac_sector)
+
+ols_simple_lc_l_lev <- lm(data = full_ind,
+                         formula = lc_l_mean ~ 0 + as.factor(szclass) + lprod_mean + 
+                           leverage_mean + 
+                           as.factor(year) + country + mac_sector)
 
 
 
