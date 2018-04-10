@@ -265,12 +265,13 @@ qcew_api <- function(data_dir, start.year){
         qcew_temp_qtr <- rbind(qcew_temp_qtr, qcew_temp_ind)
         
         cat(paste0('\nCovered ', l, '/', length(inds), ' industries'))
+        gc()
       }
       
       qcew_temp_y <- rbind(qcew_temp_y, qcew_temp_qtr)
       
-      cat(paste0('\n\nCovered ', s, ' quarter(s) from ', i))
-    
+      cat(paste0('\n\nCovered ', s, ' quarter(s) from ', i, '\n'))
+      gc()
     }
   
     output_df <- rbind(output_df, qcew_temp_y)
