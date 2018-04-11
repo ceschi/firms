@@ -189,7 +189,7 @@ instant_pkgs <- function(pkgs) {
 qcew_api <- function(data_dir, start.year){
   
   # libraries needed
-  
+  library(dplyr)
   
   # sets upper limit for loop
   curr_year <- as.numeric(format(Sys.Date(), '%Y'))-2
@@ -242,8 +242,12 @@ qcew_api <- function(data_dir, start.year){
                                      quote = '\"', 
                                      na.strings = c('', 'N/A', '-', 'N'),
                                      stringsAsFactors = F))
+  # output_df <- output_df %>% select(-contains('disclosure'),
+  #                                   -starts_with('lq_'))
   
   qcew_temp_qtr <- qcew_temp_y <- output_df
+  
+  
   
   # years loop
   for (i in as.numeric(start.year):curr_year){
@@ -260,30 +264,40 @@ qcew_api <- function(data_dir, start.year){
                                       sep = ',', 
                                       quote = '\"', 
                                       na.strings = c('', 'N/A', '-', 'N'),
-                                      stringsAsFactors = F)
+                                      stringsAsFactors = F) %>% select(-contains('disclosure'),
+                                                                       -starts_with('lq_'))
         
-        qcew_temp_qtr <- rbind(qcew_temp_qtr, qcew_temp_ind)
+        # qcew_temp_qtr <- rbind(qcew_temp_qtr, qcew_temp_ind)
+        
+        cat(qcew_temp_ind,
+                  file = file.path(data_dir,'/full_QCEW.csv'),
+                  append = T,
+            sep='\n')
         
         cat(paste0('\nCovered ', l, '/', length(inds), ' industries'))
         gc()
       }
       
-      qcew_temp_y <- rbind(qcew_temp_y, qcew_temp_qtr)
+      # qcew_temp_y <- rbind(qcew_temp_y, qcew_temp_qtr)
       
       cat(paste0('\n\nCovered ', s, ' quarter(s) from ', i, '\n'))
       gc()
     }
   
-    output_df <- rbind(output_df, qcew_temp_y)
+    # output_df <- rbind(output_df, qcew_temp_y)
+    
+    cat('\n\n\n\nCovered ', i-as.numeric(start.year), ' years out of ', curr_year-as.numeric(start.year))
   }
   
-  cat('\n\n\n\nCovered ', as.numeric(start.year)-i, ' years out of ', curr_year-as.numeric(start.year))
   
-  write.csv(x = output_df,
-            file = file.path(data_dir,'/full_QCEW.csv'),
-            col.names = T)
   
-  return(output_df)
+  # write.csv(x = output_df,
+  #           file = file.path(data_dir,'/full_QCEW.csv'),
+  #           col.names = T)
+  
+  # return(output_df)
+  
+  gc()
   
 }
 
