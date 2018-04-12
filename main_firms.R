@@ -77,7 +77,7 @@ source('wdn.R')
 
 
 ##### Exploratory panel regressions #####
-#source('ekn_expl.R')
+source('ekn_expl.R')
 
 
 #### Visualization: first set of graphs to explore ####
@@ -86,4 +86,4 @@ source('plotting.R')
 
 
 #### Saving plots ####
-source('plotggsave.r')
+source('plotggsave.R')
