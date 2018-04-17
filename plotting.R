@@ -131,9 +131,75 @@ plot_country_lprod <- ggplot(full_ind %>%
   ggtitle('Labour prod. by sector, cross-country means within size classes')
 plot_country_lprod
 
+plot_country_lc_l_iqr <- ggplot(full_ind %>% 
+                              group_by(year, country, szclass) %>% 
+                              summarise(avg_lc_l_iqr=lc_l_iqr %>% na.omit(.) %>% mean()),
+                            aes(x=year, y=avg_lc_l_iqr, colour=as.factor(szclass)))+
+  geom_line(size=1)+facet_wrap(~country, scales='free_y')+theme_bw()+labs(colour='Size class')+theme(legend.position='bottom')+
+  guides(colour=guide_legend(nrow=1, byrow=T))+ylab('LCL IQR')+xlab('Year')+
+  ggtitle('Labour cost per Employee: interquartile range; cross sector mean, within country')
+
+
+plot_sec_lc_l_iqr <- ggplot(full_ind %>% 
+                                  group_by(year, mac_sector, szclass) %>% 
+                                  summarise(avg_lc_l_iqr=lc_l_iqr %>% na.omit(.) %>% mean()),
+                                aes(x=year, y=avg_lc_l_iqr, colour=as.factor(szclass)))+
+  geom_line(size=1)+facet_wrap(~mac_sector, scales='free_y')+theme_bw()+labs(colour='Size class')+theme(legend.position='bottom')+
+  guides(colour=guide_legend(nrow=1, byrow=T))+ylab('LCL IQR')+xlab('Year')+
+  ggtitle('Labour cost per Employee: interquartile range; cross country mean, within sector')
+
+
+
+plots <- list(
+  plot_absconstr,
+  plot_avg_size,
+  plot_country_lc_l_iqr,
+  plot_country_lprod,
+  plot_fingap,
+  plot_lc_l,
+  plot_lc_l_norm,
+  plot_mac,
+  plot_relshare_emp,
+  plot_relshare_size,
+  plot_safe,
+  plot_sec_collateral_mean,
+  plot_sec_fingap,
+  plot_sec_lprod,
+  plot_sec_lc_l_iqr,
+  plot_sec_ULC_mean,
+  plot_ulc
+)
+
+
 
 # ideal plot structure: use ggridges to visualise the
 # the evolution of percentiles over time, by sector and
 # by size of firm. Optionally also by country.
 # This could be performed on a variety of indexes such as
 # ULC, LC, L, constraints (SAFE, abconstrain), and others.
+
+
+
+
+
+# housekeeping
+
+rm(
+  plot_absconstr,
+  plot_avg_size,
+  plot_country_lc_l_iqr,
+  plot_country_lprod,
+  plot_fingap,
+  plot_lc_l,
+  plot_lc_l_norm,
+  plot_mac,
+  plot_relshare_emp,
+  plot_relshare_size,
+  plot_safe,
+  plot_sec_collateral_mean,
+  plot_sec_fingap,
+  plot_sec_lc_l_iqr,
+  plot_sec_ULC_mean,
+  plot_ulc,
+  plot_sec_lprod
+)

@@ -119,17 +119,83 @@ ols_simple_lc_l_lev <- lm(data = full_ind,
                            leverage_mean + 
                            as.factor(year) + country + mac_sector)
 
+# A quick look at disperision drivers in the LCL
+ols_simple_lc_l_iqr_
+
+
+
+##### PANEL ESTIMATES #####
+# reformatting the dataframe to pd.f
+
+plm_ind <- full_ind %>%  mutate(id.var=group_indices( full_ind, country, mac_sector, szclass)) %>% pdata.frame(index='id.var')
+
+
+plm(plm_ind, index=c('year', 'id.var'), formula= lc_l_mean ~ as.factor(szclass) + lprod_mean  + collateral_mean + as.factor(year) + mac_sector + country, model="within", effect='twoways') %>% summary()
+
+
+
+
+
+regressions <- list(
+  ols=list(
+    ulc_mean=list(
+      ols_simple_ulc_absc,
+      ols_simple_ulc_cashfl,
+      ols_simple_ulc_cashhl,
+      ols_simple_ulc_coll,
+      ols_simple_ulc_debt,
+      ols_simple_ulc_eqdebt,
+      ols_simple_ulc_eqrat,
+      ols_simple_ulc_fingap,
+      ols_simple_ulc_lev,
+      ols_simple_ulc_r
+    ),
+    lc_l_mean=list(
+      ols_simple_lc_l_absc,
+      ols_simple_lc_l_cashfl,
+      ols_simple_lc_l_cashhl,
+      ols_simple_lc_l_coll,
+      ols_simple_lc_l_debt,
+      ols_simple_lc_l_eqdebt,
+      ols_simple_lc_l_eqrat,
+      ols_simple_lc_l_fingap,
+      ols_simple_lc_l_lev,
+      ols_simple_lc_l_r
+    ),
+    lc_l_iqr=list(
+      
+    )
+  )
+)
 
 
 
 
 
 
-
-
-
-
-
+# housekeeping
+rm(
+  ols_simple_lc_l_absc,
+  ols_simple_lc_l_cashfl,
+  ols_simple_lc_l_cashhl,
+  ols_simple_lc_l_coll,
+  ols_simple_lc_l_debt,
+  ols_simple_lc_l_eqdebt,
+  ols_simple_lc_l_eqrat,
+  ols_simple_lc_l_fingap,
+  ols_simple_lc_l_lev,
+  ols_simple_lc_l_r,
+  ols_simple_ulc_absc,
+  ols_simple_ulc_cashfl,
+  ols_simple_ulc_cashhl,
+  ols_simple_ulc_coll,
+  ols_simple_ulc_debt,
+  ols_simple_ulc_eqdebt,
+  ols_simple_ulc_eqrat,
+  ols_simple_ulc_fingap,
+  ols_simple_ulc_lev,
+  ols_simple_ulc_r
+)
 
 
 
