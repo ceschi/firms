@@ -4,7 +4,7 @@
 
 pkgs <- c('readstata13', 'tidyverse',
           'ggridges', 'lubridate', 'plm',
-          'stargazer')
+          'stargazer', 'lfe')
 
 
 ##### Directories, setting and creating #####
@@ -302,13 +302,24 @@ qcew_api <- function(data_dir, start.year){
 }
 
 
+##### Gatherer fct ####
+
+# fct to select qtiles and gather them
+# string to look for is string
+# dataset is data
+gatherer <- function(data, string){
+  require(dplyr)
+  
+}
+
+
 ##### Loading/installing packages #####
 instant_pkgs(pkgs)
 
 
 ##### Housekeeping ####
 rm(pkgs, instant_pkgs)
-
+gc()
 
 
 

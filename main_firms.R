@@ -3,8 +3,11 @@
 # which contains descriptive statistics and has a granular level of firm 
 # size within each sector
 
-#### Loading packages, functions, directories ####
+#### Flags ####
 
+# set to 0 to mute plots,
+# set to 1 to print plots
+flag___plot = 1
 
 
 
@@ -49,7 +52,7 @@ source('d_ind_all.r')
 
 
 ### Vars names without pre- or suffixes
-var_list <- list(descr = full_descr%>% 
+var.list <- list(descr = full_descr%>% 
                    select(-contains('_p'), 
                           -ends_with('_count'), 
                           -ends_with('_skew'), 
@@ -83,7 +86,3 @@ source('ekn_expl.R')
 #### Visualization: first set of graphs to explore ####
 source('plotting.R')
 
-
-
-#### Saving plots ####
-source('plotggsave.R')

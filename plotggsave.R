@@ -84,3 +84,12 @@ ggsave(filename='Sectoral fingap means.pdf',
        path=graphs_dir,
        device='pdf',
        height=8, width=14.6, units='in')
+
+
+
+
+
+
+
+##### housekeeping ####
+gc()

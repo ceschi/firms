@@ -383,10 +383,13 @@ full_descr <- merge(full_descr,
 
 full_descr <- full_descr %>% mutate(lc_l_mean_norm=lc_l_mean/lc_l_mean_init)
 
+
+full_descr <- full_descr %>% mutate(lcl_mean = lc_mean/l_mean)
+
 #### Housekeeping ####
 
 rm(new_info, full_descr_2012)
-
+gc()
 
 
 
