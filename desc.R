@@ -28,6 +28,12 @@ new_info <- anti_join(full_descr_2012, full_descr, c('year', 'country', 'szclass
 full_descr <- rbind(full_descr, new_info) %>% arrange(., year, country, szclass)
 
 
+nomi <- c('year', 'country', 'szclass')
+altrinomi <- setdiff(names(full_descr), nomi)
+
+full_descr <- full_descr[,c(nomi,altrinomi)]
+full_descr <- full_descr %>% arrange(year, country, szclass)
+
 ##### New variables #####
 
 # adding relative share of firms' size
@@ -63,7 +69,7 @@ full_descr <- full_descr %>% mutate(lc_l_mean_norm=lc_l_mean/lc_l_mean_init)
 # reproducing labour cost per employee
 full_descr <- full_descr %>% mutate(lcl_mean = lc_mean/l_mean)
 
-#### Housekeeping ####
 
-rm(new_info, full_descr_2012)
+#### Housekeeping ####
+rm(new_info, full_descr_2012, nomi, altrinomi)
 gc()

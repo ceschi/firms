@@ -29,6 +29,13 @@ full_ind_2012 <- read.dta13(file.path(working, 'descriptive_all_countries_macsec
 new_info <- anti_join(full_ind_2012, full_ind, c('country', 'mac_sector', 'szclass', 'year'))
 full_ind <- rbind(full_ind, new_info) %>% arrange(., country, mac_sector, szclass, year)
 
+nomi <- c('year', 'country', 'mac_sector', 'szclass')
+altrinomi <- setdiff(names(full_ind), nomi)
+
+
+full_ind <- full_ind[,c(nomi,altrinomi)]
+full_ind <- full_ind %>% arrange(year, country, mac_sector, szclass)
+
 ##### New variables #####
 # adding relative share of firms' size, by country, size class, macro sector
 # this sort of information is good to perform country specific analysis
@@ -76,11 +83,11 @@ full_ind <- full_join(full_ind, temp_ind_bis, by=c('year', 'country', 'szclass')
 # in alternative, use growth rates, 
 # already available in the dataset
 
-temp <- full_ind %>% group_by(year, country, mac_sector, szclass) %>% 
-  summarise(coll_mean_re=first(collateral_mean))
-
-temp <- full_join(temp, full_ind, by=c('country', 'year', 'mac_sector', 'szclass')) %>% 
-  arrange(country, mac_sector, szclass, year)
+# temp <- full_ind %>% group_by(year, country, mac_sector, szclass) %>% 
+#   summarise(coll_mean_re=first(collateral_mean))
+# 
+# temp <- full_join(temp, full_ind, by=c('country', 'year', 'mac_sector', 'szclass')) %>% 
+#   arrange(country, mac_sector, szclass, year)
 
 
 
@@ -385,7 +392,8 @@ uncond_rva = full_ind %>% select(year, country, mac_sector, szclass,
   arrange(year, country, mac_sector, szclass, qtiles)
 )
 
+
 #### Housekeeping ####
 
-rm(new_info, full_ind_2012, temp_ind, temp_ind_bis)
+rm(new_info, full_ind_2012, temp_ind, temp_ind_bis, nomi, altrinomi)
 gc()
