@@ -184,122 +184,122 @@ instant_pkgs <- function(pkgs) {
 # }
 
 
-# QCEW via API
-
-qcew_api <- function(data_dir, start.year){
-  
-  # libraries needed
-  library(dplyr)
-  
-  # sets upper limit for loop
-  curr_year <- as.numeric(format(Sys.Date(), '%Y'))-2
-  
-  ### url composition:
-  # invariant part of the API
-  url_core <- 'http://data.bls.gov/cew/data/api/'
-  
-  # for yearly freq data
-  url_yrly <- '/A/' 
-  
-  # last part to have csv ext
-  # kept for eventual extension
-  url_postfix <- '.csv'
-  
-  # declaring industries and
-  # creating postfixes
-  industries <- c(11, 21, 23, '31_33', 22, 42,
-                  '44_45', '48_49',51, 52, 53,
-                  54, 55, 56, 61, 62, 71, 72,
-                  81, 92, 99)
-  ind_names <- c('Agriculture',
-                 'Mining',
-                 'Construction',
-                 'Manufacturing',
-                 'Utilities',
-                 'Wholesale Trade',
-                 'Retail Trade',
-                 'Transportation & Warehousing',
-                 'Information',
-                 'Finance',
-                 'Real Estate',
-                 'Professional and Tech services',
-                 'Management Services',
-                 'Administrative and Waste Services',
-                 'Educational Services',
-                 'Healtcare',
-                 'Arts & Entertainement',
-                 'Accommodation',
-                 'Others, non PA',
-                 'PA',
-                 'Unclassified')
-  
-  inds <- paste0(industries, '.csv')
-  
-  output_df <- data.frame(matrix(ncol=42, nrow=0))
-  names(output_df) <- names(read.csv(file='http://data.bls.gov/cew/data/api/2017/1/industry/10.csv',
-                                     header=T,
-                                     sep = ',', 
-                                     quote = '\"', 
-                                     na.strings = c('', 'N/A', '-', 'N'),
-                                     stringsAsFactors = F))
-  # output_df <- output_df %>% select(-contains('disclosure'),
-  #                                   -starts_with('lq_'))
-  
-  qcew_temp_qtr <- qcew_temp_y <- output_df
-  
-  
-  
-  # years loop
-  for (i in as.numeric(start.year):curr_year){
-    
-    # qtrs loop
-    for (s in 1:4){
-      
-      # industries loop
-      for (l in 1:length(inds)){
-        
-        
-        qcew_temp_ind <- read.csv(file=paste0(url_core, i, '/', s, '/industry/',inds[l]),
-                                      header = T,
-                                      sep = ',', 
-                                      quote = '\"', 
-                                      na.strings = c('', 'N/A', '-', 'N'),
-                                      stringsAsFactors = F) %>% select(-contains('disclosure'),
-                                                                       -starts_with('lq_'))
-        
-        # qcew_temp_qtr <- rbind(qcew_temp_qtr, qcew_temp_ind)
-        
-        cat(qcew_temp_ind,
-                  file = file.path(data_dir,'/full_QCEW.csv'),
-                  append = T,
-            sep='\n')
-        
-        cat(paste0('\nCovered ', l, '/', length(inds), ' industries'))
-        gc()
-      }
-      
-      # qcew_temp_y <- rbind(qcew_temp_y, qcew_temp_qtr)
-      
-      cat(paste0('\n\nCovered ', s, ' quarter(s) from ', i, '\n'))
-      gc()
-    }
-  
-    # output_df <- rbind(output_df, qcew_temp_y)
-    
-    cat('\n\n\n\nCovered ', i-as.numeric(start.year), ' years out of ', curr_year-as.numeric(start.year))
-  }
-  
-  
-  
-  # write.csv(x = output_df,
-  #           file = file.path(data_dir,'/full_QCEW.csv'),
-  #           col.names = T)
-  
-  # return(output_df)
-  
-  gc()
-  
-}
+# # QCEW via API
+# 
+# qcew_api <- function(data_dir, start.year){
+#   
+#   # libraries needed
+#   library(dplyr)
+#   
+#   # sets upper limit for loop
+#   curr_year <- as.numeric(format(Sys.Date(), '%Y'))-2
+#   
+#   ### url composition:
+#   # invariant part of the API
+#   url_core <- 'http://data.bls.gov/cew/data/api/'
+#   
+#   # for yearly freq data
+#   url_yrly <- '/A/' 
+#   
+#   # last part to have csv ext
+#   # kept for eventual extension
+#   url_postfix <- '.csv'
+#   
+#   # declaring industries and
+#   # creating postfixes
+#   industries <- c(11, 21, 23, '31_33', 22, 42,
+#                   '44_45', '48_49',51, 52, 53,
+#                   54, 55, 56, 61, 62, 71, 72,
+#                   81, 92, 99)
+#   ind_names <- c('Agriculture',
+#                  'Mining',
+#                  'Construction',
+#                  'Manufacturing',
+#                  'Utilities',
+#                  'Wholesale Trade',
+#                  'Retail Trade',
+#                  'Transportation & Warehousing',
+#                  'Information',
+#                  'Finance',
+#                  'Real Estate',
+#                  'Professional and Tech services',
+#                  'Management Services',
+#                  'Administrative and Waste Services',
+#                  'Educational Services',
+#                  'Healtcare',
+#                  'Arts & Entertainement',
+#                  'Accommodation',
+#                  'Others, non PA',
+#                  'PA',
+#                  'Unclassified')
+#   
+#   inds <- paste0(industries, '.csv')
+#   
+#   output_df <- data.frame(matrix(ncol=42, nrow=0))
+#   names(output_df) <- names(read.csv(file='http://data.bls.gov/cew/data/api/2017/1/industry/10.csv',
+#                                      header=T,
+#                                      sep = ',', 
+#                                      quote = '\"', 
+#                                      na.strings = c('', 'N/A', '-', 'N'),
+#                                      stringsAsFactors = F))
+#   # output_df <- output_df %>% select(-contains('disclosure'),
+#   #                                   -starts_with('lq_'))
+#   
+#   qcew_temp_qtr <- qcew_temp_y <- output_df
+#   
+#   
+#   
+#   # years loop
+#   for (i in as.numeric(start.year):curr_year){
+#     
+#     # qtrs loop
+#     for (s in 1:4){
+#       
+#       # industries loop
+#       for (l in 1:length(inds)){
+#         
+#         
+#         qcew_temp_ind <- read.csv(file=paste0(url_core, i, '/', s, '/industry/',inds[l]),
+#                                       header = T,
+#                                       sep = ',', 
+#                                       quote = '\"', 
+#                                       na.strings = c('', 'N/A', '-', 'N'),
+#                                       stringsAsFactors = F) %>% select(-contains('disclosure'),
+#                                                                        -starts_with('lq_'))
+#         
+#         # qcew_temp_qtr <- rbind(qcew_temp_qtr, qcew_temp_ind)
+#         
+#         cat(qcew_temp_ind,
+#                   file = file.path(data_dir,'/full_QCEW.csv'),
+#                   append = T,
+#             sep='\n')
+#         
+#         cat(paste0('\nCovered ', l, '/', length(inds), ' industries'))
+#         gc()
+#       }
+#       
+#       # qcew_temp_y <- rbind(qcew_temp_y, qcew_temp_qtr)
+#       
+#       cat(paste0('\n\nCovered ', s, ' quarter(s) from ', i, '\n'))
+#       gc()
+#     }
+#   
+#     # output_df <- rbind(output_df, qcew_temp_y)
+#     
+#     cat('\n\n\n\nCovered ', i-as.numeric(start.year), ' years out of ', curr_year-as.numeric(start.year))
+#   }
+#   
+#   
+#   
+#   # write.csv(x = output_df,
+#   #           file = file.path(data_dir,'/full_QCEW.csv'),
+#   #           col.names = T)
+#   
+#   # return(output_df)
+#   
+#   gc()
+#   
+# }
 
 
 ##### Gatherer fct ####
@@ -307,25 +307,25 @@ qcew_api <- function(data_dir, start.year){
 # fct to select qtiles and gather them
 # string to look for is string
 # dataset is data
-gatherer <- function(data, string){
-  require(dplyr)
-  quo_string <- quo(string)
-  
-  temp <- data %>% select(year, country, mac_sector, szclass, 
-                              contains(!!quo_string),-ends_with('_ow'),
-                              -ends_with('_iqr'), -ends_with('_sd'),
-                              -ends_with('_skew'), -ends_with('_count'),
-                              -starts_with('g_'), -starts_with('tot'),
-                              -contains('ulc'), -contains('lc_l'),
-                              -contains('lcl')) %>%
-    group_by(year, country, mac_sector, szclass) %>% 
-    gather(key = qtiles, value=kprod, kprod_mean:kprod_p99) %>% 
-    mutate(qtiles=gsub('kprod_p', 'P', qtiles)) %>% 
-    mutate(qtiles=gsub('kprod_mean', 'mean', qtiles)) %>% 
-    arrange(year, country, mac_sector, szclass, qtiles)
-  
-  return(temp)
-}
+# gatherer <- function(data, string){
+#   require(dplyr)
+#   quo_string <- quo(string)
+#   
+#   temp <- data %>% select(year, country, mac_sector, szclass, 
+#                               contains(!!quo_string),-ends_with('_ow'),
+#                               -ends_with('_iqr'), -ends_with('_sd'),
+#                               -ends_with('_skew'), -ends_with('_count'),
+#                               -starts_with('g_'), -starts_with('tot'),
+#                               -contains('ulc'), -contains('lc_l'),
+#                               -contains('lcl')) %>%
+#     group_by(year, country, mac_sector, szclass) %>% 
+#     gather(key = qtiles, value=kprod, kprod_mean:kprod_p99) %>% 
+#     mutate(qtiles=gsub('kprod_p', 'P', qtiles)) %>% 
+#     mutate(qtiles=gsub('kprod_mean', 'mean', qtiles)) %>% 
+#     arrange(year, country, mac_sector, szclass, qtiles)
+#   
+#   return(temp)
+# }
 
 
 ##### Loading/installing packages #####

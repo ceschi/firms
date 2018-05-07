@@ -30,7 +30,7 @@ source('dirfunc.R')
 
 #### Importing and tidying EU data ####
 
-source('d_size_all.r')
+source('desc.R')
 # picks 'descriptive_all_countries_country_szclass_all.dta' and imports selected columns,
 # data present the full sample at a country-size-class level of aggregation, no industry involved
 # this dataset is good for aggregated, preliminary investigation
@@ -40,7 +40,7 @@ source('d_size_all.r')
 # used for sake of simplicity
 
 
-source('d_ind_all.r')
+source('indust.R')
 # picks 'descriptive_all_countries_macsec_szclass_all.dta' and imports selected columns,
 # data present the full sample at a country-size-class-NACE2 industry level of aggregation, 
 # this dataset is good for less aggregated, sophisticated investigation

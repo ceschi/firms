@@ -157,7 +157,7 @@ plm_lc_l_coll <- plm(plm_ind,
     index = c('id.var'),
     model="within", # fixed effects
     effect='twoways' # time and id FE
-) %>% summary()
+) 
 
 
 # using lfe::felm allows for fast, clusterable FE estimation
@@ -165,7 +165,7 @@ plm_lc_l_coll <- plm(plm_ind,
 # Given data aggregation one cannot add the full set of FE: moreover
 # a country FE absorbs a big chunk of the variation, so I decide to
 # exploit this cross country variability and consider it while clustering
-lfe_coll <- felm(data = full_ind, formula = lc_l_mean ~ collateral_mean *as.factor(szclass) + lprod_mean
+lfe_coll <- felm(data = full_ind, formula = g_lc_l_mean ~ g_collateral_mean +as.factor(szclass) + g_lprod_mean
      | year + mac_sector | 0 | country + szclass, 
      exactDOF=T)
 
@@ -206,8 +206,7 @@ regressions <- list(
     plm_lc_l_coll
           ),
   felm=list(
-            lfe_coll,
-            lfe_coll_gath
+            lfe_coll
            )
 )
 
@@ -238,7 +237,9 @@ rm(
   ols_simple_ulc_eqrat,
   ols_simple_ulc_fingap,
   ols_simple_ulc_lev,
-  ols_simple_ulc_r
+  ols_simple_ulc_r,
+  plm_lc_l_coll,
+  lfe_coll
 )
 gc()
 
