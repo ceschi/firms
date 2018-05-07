@@ -415,10 +415,20 @@ full_ind <- full_join(full_ind, temp_ind, by=c('year', 'country', 'szclass'))
 full_ind <- full_join(full_ind, temp_ind_bis, by=c('year', 'country', 'szclass'))
 
 
-# reshaping DF to get additional obs from qtiles
 
+##### Rebasing of vars to first obs=1
+##### this washes levels effect for each country,
+##### does it kill variation?
+
+
+# reshaping DF to get additional obs from qtiles
+# WARN: these are unconditional distributions for
+# each variable
+
+
+unconditional_vars = list(
 # gathering TFP
-temp_tfp <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_tfp = full_ind %>% select(year, country, mac_sector, szclass, 
                                 contains('tfp'),-ends_with('_ow'),
                                 -ends_with('_iqr'), -ends_with('_sd'),
                                 -ends_with('_skew'), -ends_with('_count'),
@@ -426,11 +436,11 @@ temp_tfp <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=tfp, tfp_mean:tfp_p99) %>% 
   mutate(qtiles=gsub('tfp_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('tfp_mean', 'mean', qtiles)) %>%
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('tfp_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 # gathering labour cost per employee
-temp_lc_l <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_lc_l = full_ind %>% select(year, country, mac_sector, szclass, 
                                  contains('lc_l'),-ends_with('_ow'), 
                                  -ends_with('_iqr'), -ends_with('_sd'),
                                  -ends_with('_skew'), -ends_with('_count'), 
@@ -438,11 +448,11 @@ temp_lc_l <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=lc_l, lc_l_mean:lc_l_p99) %>% 
   mutate(qtiles=gsub('lc_l_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('lc_l_mean', 'mean', qtiles)) %>%
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('lc_l_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 # gathering labour productivity
-temp_lprod <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_lprod = full_ind %>% select(year, country, mac_sector, szclass, 
                                   contains('lprod'), -ends_with('_ow'), 
                                   -ends_with('_iqr'), -ends_with('_sd'),
                                   -ends_with('_skew'), -ends_with('_count'),
@@ -450,11 +460,11 @@ temp_lprod <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=lprod, lprod_mean:lprod_p99) %>% 
   mutate(qtiles=gsub('lprod_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('lprod_mean', 'mean', qtiles)) %>%
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('lprod_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 # gathering unit labour cost
-temp_ulc <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_ulc = full_ind %>% select(year, country, mac_sector, szclass, 
                                 contains('ulc'), -ends_with('_ow'), 
                                 -ends_with('_iqr'), -ends_with('_sd'),
                                 -ends_with('_skew'), -ends_with('_count'),
@@ -462,25 +472,25 @@ temp_ulc <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=ulc, ulc_mean:ulc_p99) %>% 
   mutate(qtiles=gsub('ulc_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('ulc_mean', 'mean', qtiles)) %>%
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('ulc_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 
 # gathering collateral ratio
-temp_coll <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_coll = full_ind %>% select(year, country, mac_sector, szclass, 
                                 contains('collateral'), -ends_with('_ow'), 
                                 -ends_with('_iqr'), -ends_with('_sd'),
                                 -ends_with('_skew'), -ends_with('_count'),
-                                -starts_with('g_')) %>%
+                                -starts_with('g_'), -contains('crossect')) %>%
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=collateral, collateral_mean:collateral_p99) %>%
   mutate(qtiles=gsub('collateral_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('collateral_mean', 'mean', qtiles)) %>%
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('collateral_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 
 # gathering equity/debt ratio
-temp_equity_debt <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_equity_debt = full_ind %>% select(year, country, mac_sector, szclass, 
                                 contains('equity_debt'), -ends_with('_ow'), 
                                 -ends_with('_iqr'), -ends_with('_sd'),
                                 -ends_with('_skew'), -ends_with('_count'),
@@ -488,11 +498,11 @@ temp_equity_debt <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=equity_debt, equity_debt_mean:equity_debt_p99) %>%
   mutate(qtiles=gsub('equity_debt_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('equity_debt_mean', 'mean', qtiles)) %>%
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('equity_debt_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 # gathering cash holdings
-temp_cashhold <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_cashhold = full_ind %>% select(year, country, mac_sector, szclass, 
                                 contains('cash_holdings'),-ends_with('_ow'),
                                 -ends_with('_iqr'), -ends_with('_sd'),
                                 -ends_with('_skew'), -ends_with('_count'),
@@ -500,11 +510,11 @@ temp_cashhold <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=cash_holdings, cash_holdings_mean:cash_holdings_p99) %>% 
   mutate(qtiles=gsub('cash_holdings_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('cash_holdings_mean', 'mean', qtiles)) %>%
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('cash_holdings_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 # gathering financial gap
-temp_fingap <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_fingap = full_ind %>% select(year, country, mac_sector, szclass, 
                                      contains('financial_gap'),-ends_with('_ow'),
                                      -ends_with('_iqr'), -ends_with('_sd'),
                                      -ends_with('_skew'), -ends_with('_count'),
@@ -512,11 +522,11 @@ temp_fingap <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=financial_gap, financial_gap_mean:financial_gap_p99) %>% 
   mutate(qtiles=gsub('financial_gap_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('financial_gap_mean', 'mean', qtiles)) %>%
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('financial_gap_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles),
 
 # gathering labour cost
-temp_lc <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_lc = full_ind %>% select(year, country, mac_sector, szclass, 
                                    contains('lc'),-ends_with('_ow'),
                                    -ends_with('_iqr'), -ends_with('_sd'),
                                    -ends_with('_skew'), -ends_with('_count'),
@@ -526,11 +536,11 @@ temp_lc <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=lc, lc_mean:lc_p99) %>% 
   mutate(qtiles=gsub('lc_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('lc_mean', 'mean', qtiles)) %>%
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('lc_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 # gathering employment
-temp_l <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_l = full_ind %>% select(year, country, mac_sector, szclass, 
                               l_mean, l_p1, l_p10, 
                               l_p20, l_p30, l_p40, 
                               l_p50, l_p60, l_p70, 
@@ -538,11 +548,11 @@ temp_l <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=l, l_mean:l_p99) %>% 
   mutate(qtiles=gsub('l_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('l_mean', 'mean', qtiles)) %>% 
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('l_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 # gathering leverage
-temp_leverage <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_leverage = full_ind %>% select(year, country, mac_sector, szclass, 
                                      contains('leverage'),-ends_with('_ow'),
                                      -ends_with('_iqr'), -ends_with('_sd'),
                                      -ends_with('_skew'), -ends_with('_count'),
@@ -552,11 +562,11 @@ temp_leverage <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=leverage, leverage_mean:leverage_p99) %>% 
   mutate(qtiles=gsub('leverage_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('leverage_mean', 'mean', qtiles)) %>% 
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('leverage_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 # wageshare
-temp_wageshare <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_wageshare = full_ind %>% select(year, country, mac_sector, szclass, 
                                      contains('wageshare'),-ends_with('_ow'),
                                      -ends_with('_iqr'), -ends_with('_sd'),
                                      -ends_with('_skew'), -ends_with('_count'),
@@ -566,11 +576,11 @@ temp_wageshare <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=wageshare, wageshare_mean:wageshare_p99) %>% 
   mutate(qtiles=gsub('wageshare_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('wageshare_mean', 'mean', qtiles)) %>% 
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('wageshare_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
 
 # gathering investment ratio
-temp_inv_ratio <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_inv_ratio = full_ind %>% select(year, country, mac_sector, szclass, 
                                       contains('invest_ratio'),-ends_with('_ow'),
                                       -ends_with('_iqr'), -ends_with('_sd'),
                                       -ends_with('_skew'), -ends_with('_count'),
@@ -580,11 +590,11 @@ temp_inv_ratio <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=invest_ratio, invest_ratio_mean:invest_ratio_p99) %>% 
   mutate(qtiles=gsub('invest_ratio_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('invest_ratio_mean', 'mean', qtiles)) %>% 
-  arrange(year, country, mac_sector, szclass, qtiles)
+  mutate(qtiles=gsub('invest_ratio_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles),
 
 # gathering capital productivity
-temp_kprod <- full_ind %>% select(year, country, mac_sector, szclass, 
+uncond_kprod = full_ind %>% select(year, country, mac_sector, szclass, 
                                       contains('kprod'),-ends_with('_ow'),
                                       -ends_with('_iqr'), -ends_with('_sd'),
                                       -ends_with('_skew'), -ends_with('_count'),
@@ -594,25 +604,162 @@ temp_kprod <- full_ind %>% select(year, country, mac_sector, szclass,
   group_by(year, country, mac_sector, szclass) %>% 
   gather(key = qtiles, value=kprod, kprod_mean:kprod_p99) %>% 
   mutate(qtiles=gsub('kprod_p', 'P', qtiles)) %>% 
-  mutate(qtiles=gsub('kprod_mean', 'mean', qtiles)) %>% 
+  mutate(qtiles=gsub('kprod_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
+
+# gathering rk
+uncond_rk = full_ind %>% select(year, country, mac_sector, szclass, 
+                                  contains('rk'),-ends_with('_ow'),
+                                  -ends_with('_iqr'), -ends_with('_sd'),
+                                  -ends_with('_skew'), -ends_with('_count'),
+                                  -starts_with('g_'), -starts_with('tot'),
+                                  -contains('ulc'), -contains('lc_l'),
+                                  -contains('lcl'), -contains('rk_l')) %>%
+  group_by(year, country, mac_sector, szclass) %>% 
+  gather(key = qtiles, value=rk, rk_mean:rk_p99) %>% 
+  mutate(qtiles=gsub('rk_p', 'P', qtiles)) %>% 
+  mutate(qtiles=gsub('rk_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
+
+# gathering labour productivty based on revenues
+uncond_lprod_rev = full_ind %>% select(year, country, mac_sector, szclass, 
+                                  contains('lprod_rev'),-ends_with('_ow'),
+                                  -ends_with('_iqr'), -ends_with('_sd'),
+                                  -ends_with('_skew'), -ends_with('_count'),
+                                  -starts_with('g_'), -starts_with('tot'),
+                                  -contains('ulc'), -contains('lc_l'),
+                                  -contains('lcl'), -contains('rk_l')) %>%
+  group_by(year, country, mac_sector, szclass) %>% 
+  gather(key = qtiles, value=lprod_rev, lprod_rev_mean:lprod_rev_p99) %>% 
+  mutate(qtiles=gsub('lprod_rev_p', 'P', qtiles)) %>% 
+  mutate(qtiles=gsub('lprod_rev_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles),
+
+# gathering marginal product of capital
+uncond_mrpk = full_ind %>% select(year, country, mac_sector, szclass, 
+                                 contains('mrpk'),-ends_with('_ow'),
+                                 -ends_with('_iqr'), -ends_with('_sd'),
+                                 -ends_with('_skew'), -ends_with('_count'),
+                                 -starts_with('g_'), -starts_with('tot'),
+                                 -contains('ulc'), -contains('lc_l'),
+                                 -contains('lcl'), -contains('rk_l')) %>%
+  group_by(year, country, mac_sector, szclass) %>% 
+  gather(key = qtiles, value=mrpk, mrpk_mean:mrpk_p99) %>% 
+  mutate(qtiles=gsub('mrpk_p', 'P', qtiles)) %>% 
+  mutate(qtiles=gsub('mrpk_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
+
+
+# gathering marginal product of labour
+uncond_mrpl = full_ind %>% select(year, country, mac_sector, szclass, 
+                                 contains('mrpl'),-ends_with('_ow'),
+                                 -ends_with('_iqr'), -ends_with('_sd'),
+                                 -ends_with('_skew'), -ends_with('_count'),
+                                 -starts_with('g_'), -starts_with('tot'),
+                                 -contains('ulc'), -contains('lc_l'),
+                                 -contains('lcl'), -contains('rk_l')) %>%
+  group_by(year, country, mac_sector, szclass) %>% 
+  gather(key = qtiles, value=mrpl, mrpl_mean:mrpl_p99) %>% 
+  mutate(qtiles=gsub('mrpl_p', 'P', qtiles)) %>% 
+  mutate(qtiles=gsub('mrpl_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles), 
+
+# gathering capital intensity
+uncond_rk_l = full_ind %>% select(year, country, mac_sector, szclass, 
+                                 contains('rk_l'),-ends_with('_ow'),
+                                 -ends_with('_iqr'), -ends_with('_sd'),
+                                 -ends_with('_skew'), -ends_with('_count'),
+                                 -starts_with('g_'), -starts_with('tot'),
+                                 -contains('ulc'), -contains('lc_l'),
+                                 -contains('lcl')) %>%
+  group_by(year, country, mac_sector, szclass) %>% 
+  gather(key = qtiles, value=rk_l, rk_l_mean:rk_l_p99) %>% 
+  mutate(qtiles=gsub('rk_l_p', 'P', qtiles)) %>% 
+  mutate(qtiles=gsub('rk_l_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles),
+
+# gathering return on assets
+uncond_roa = full_ind %>% select(year, country, mac_sector, szclass, 
+                                 contains('roa'),-ends_with('_ow'),
+                                 -ends_with('_iqr'), -ends_with('_sd'),
+                                 -ends_with('_skew'), -ends_with('_count'),
+                                 -starts_with('g_'), -starts_with('tot'),
+                                 -contains('ulc'), -contains('lc_l'),
+                                 -contains('lcl')) %>%
+  group_by(year, country, mac_sector, szclass) %>% 
+  gather(key = qtiles, value=roa, roa_mean:roa_p99) %>% 
+  mutate(qtiles=gsub('roa_p', 'P', qtiles)) %>% 
+  mutate(qtiles=gsub('roa_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles),
+
+# gathering real turnover
+uncond_rturnover = full_ind %>% select(year, country, mac_sector, szclass, 
+                                contains('rturnover'),-ends_with('_ow'),
+                                -ends_with('_iqr'), -ends_with('_sd'),
+                                -ends_with('_skew'), -ends_with('_count'),
+                                -starts_with('g_'), -starts_with('tot'),
+                                -contains('ulc'), -contains('lc_l'),
+                                -contains('lcl')) %>%
+  group_by(year, country, mac_sector, szclass) %>% 
+  gather(key = qtiles, value=rturnover, rturnover_mean:rturnover_p99) %>% 
+  mutate(qtiles=gsub('rturnover_p', 'P', qtiles)) %>% 
+  mutate(qtiles=gsub('rturnover_mean', 'mean', qtiles))%>% 
+  arrange(year, country, mac_sector, szclass, qtiles),
+
+
+# gathering real value added
+uncond_rva = full_ind %>% select(year, country, mac_sector, szclass, 
+                                      contains('rva'),-ends_with('_ow'),
+                                      -ends_with('_iqr'), -ends_with('_sd'),
+                                      -ends_with('_skew'), -ends_with('_count'),
+                                      -starts_with('g_'), -starts_with('tot'),
+                                      -contains('ulc'), -contains('lc_l'),
+                                      -contains('lcl')) %>%
+  group_by(year, country, mac_sector, szclass) %>% 
+  gather(key = qtiles, value=rva, rva_mean:rva_p99) %>% 
+  mutate(qtiles=gsub('rva_p', 'P', qtiles)) %>% 
+  mutate(qtiles=gsub('rva_mean', 'mean', qtiles)) %>% 
   arrange(year, country, mac_sector, szclass, qtiles)
-
-# complete with function and with following vars:
-# rk_, lprod_rev_, mrpk_, mrpl_, rk_l_, roa_, rturnover_, rva_
+)
 
 
 
-
-
-# joining temp_* in one
-
-full_ind_gath <- temp_lc_l %>% full_join(temp_l) %>% full_join(temp_lc) %>% 
-  full_join(temp_lprod) %>% full_join(temp_tfp) %>% full_join(temp_coll) %>% 
-  full_join(temp_ulc) %>% full_join(temp_cashhold) %>% full_join(temp_leverage) %>% 
-  full_join(temp_wageshare) %>% full_join(temp_inv_ratio) %>% 
-  full_join(temp_kprod)
-
-
+# # joining temp_* in one
+# keys=c('year', 'country', 'mac_sector', 'szclass', 'qtiles')
+# 
+# full_ind_gath <- temp_lc_l %>% full_join(temp_l, by = keys) %>%
+#   full_join(temp_lc, by = keys) %>% 
+#   full_join(temp_lprod, by = keys) %>% 
+#   full_join(temp_tfp, by = keys) %>% 
+#   full_join(temp_coll, by = keys) %>% 
+#   full_join(temp_ulc, by = keys) %>% 
+#   full_join(temp_cashhold, by = keys) %>% 
+#   full_join(temp_leverage, by = keys) %>% 
+#   full_join(temp_wageshare, by = keys) %>% 
+#   full_join(temp_inv_ratio, by = keys) %>% 
+#   full_join(temp_kprod, by = keys) %>% 
+#   full_join(temp_rk, by = keys) %>% 
+#   full_join(temp_lprod_rev, by = keys) %>% 
+#   full_join(temp_mrpk, by = keys) %>% 
+#   full_join(temp_mrpl, by = keys) %>% 
+#   full_join(temp_rk_l, by = keys) %>% 
+#   full_join(temp_roa, by = keys) %>% 
+#   full_join(temp_rturnover, by = keys) %>% 
+#   full_join(temp_rva, by = keys) %>% 
+#   arrange(year, country, mac_sector, szclass, qtiles)
+# 
+# full_ind_gath$year <- as.factor(full_ind_gath$year)
+# full_ind_gath$country <- as.factor(full_ind_gath$country)
+# full_ind_gath$mac_sector <- as.factor(full_ind_gath$mac_sector)
+# full_ind_gath$szclass <- as.factor(full_ind_gath$szclass)
+# full_ind_gath$qtiles <- as.factor(full_ind_gath$qtiles)
+# 
+# full_ind_gath <- full_ind_gath %>% mutate(lcl=lc/l)
+# 
+# full_ind_gath <- full_ind_gath %>% group_by(year, country, mac_sector, qtiles)  
+# 
+# 
+# 
 #### Housekeeping ####
 
 rm(new_info, full_ind_2012, temp_ind, temp_ind_bis)

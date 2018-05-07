@@ -309,7 +309,22 @@ qcew_api <- function(data_dir, start.year){
 # dataset is data
 gatherer <- function(data, string){
   require(dplyr)
+  quo_string <- quo(string)
   
+  temp <- data %>% select(year, country, mac_sector, szclass, 
+                              contains(!!quo_string),-ends_with('_ow'),
+                              -ends_with('_iqr'), -ends_with('_sd'),
+                              -ends_with('_skew'), -ends_with('_count'),
+                              -starts_with('g_'), -starts_with('tot'),
+                              -contains('ulc'), -contains('lc_l'),
+                              -contains('lcl')) %>%
+    group_by(year, country, mac_sector, szclass) %>% 
+    gather(key = qtiles, value=kprod, kprod_mean:kprod_p99) %>% 
+    mutate(qtiles=gsub('kprod_p', 'P', qtiles)) %>% 
+    mutate(qtiles=gsub('kprod_mean', 'mean', qtiles)) %>% 
+    arrange(year, country, mac_sector, szclass, qtiles)
+  
+  return(temp)
 }
 
 

@@ -206,7 +206,8 @@ regressions <- list(
     plm_lc_l_coll
           ),
   felm=list(
-            
+            lfe_coll,
+            lfe_coll_gath
            )
 )
 
