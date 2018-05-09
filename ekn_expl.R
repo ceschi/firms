@@ -146,18 +146,18 @@ ols_simple_lc_l_iqr_coll <- lm(data = full_ind,
 # create a syntetic index combining 
 # country and macro sector, called id.var
 
-plm_ind <- full_ind %>%  
-  mutate(id.var=group_indices( ., year, country)) %>% 
+plm_ind <- full_ind %>%
+  mutate(id.var = group_indices( ., country, mac_sector)) %>%
   pdata.frame(index='id.var')
 
 # Panel Regressions
 
-plm_lc_l_coll <- plm(plm_ind, 
-    formula = lc_l_iqr ~ as.factor(szclass) + lprod_iqr  + collateral_mean,
+plm_lc_l_coll <- plm(plm_ind,
+    formula = lc_l_mean ~ as.factor(szclass) + lprod_mean  + collateral_mean,
     index = c('id.var'),
     model="within", # fixed effects
     effect='twoways' # time and id FE
-) 
+)
 
 
 # using lfe::felm allows for fast, clusterable FE estimation
@@ -165,9 +165,42 @@ plm_lc_l_coll <- plm(plm_ind,
 # Given data aggregation one cannot add the full set of FE: moreover
 # a country FE absorbs a big chunk of the variation, so I decide to
 # exploit this cross country variability and consider it while clustering
-lfe_coll <- felm(data = full_ind, formula = g_lc_l_mean ~ g_collateral_mean +as.factor(szclass) + g_lprod_mean
+lfe_coll <- felm(data = full_ind, formula = lc_l_mean ~ collateral_mean +as.factor(szclass) + lprod_mean
      | year + mac_sector | 0 | country + szclass, 
      exactDOF=T)
+
+
+# using rebased to first obs variables
+# grouping for country, sector, size class
+# so no need for relative fixed effects
+# Run in log and on levels
+
+lfe_coll_rebased_lvl <- felm(data=full_ind,
+                             formula = lc_l_mean_rebased ~ 0 + collateral_mean_rebased + lprod_mean_rebased
+                             | year | 0 | year,
+                             exactDOF = T)
+
+
+
+lfe_coll_rebased_log <- felm(data=full_ind,
+                         formula = log(lc_l_mean_rebased) ~ 0 + log(collateral_mean_rebased) + log(lprod_mean_rebased) 
+                         | year | 0 | year,
+                         exactDOF = T)
+
+lfe_coll_rebased_lvl_sz <- 1:5 %>% as.character() %>% as.list()
+lfe_coll_rebased_log_sz <- lfe_coll_rebased_lvl_sz
+
+for (i in 1:5){
+  lfe_coll_rebased_lvl_sz[[as.character(i)]] <- felm(data=full_ind %>% filter(szclass==i),
+                                                     formula = lc_l_mean_rebased ~ 0 + collateral_mean_rebased + lprod_mean_rebased
+                                                     | year | 0 | year,
+                                                     exactDOF = T)
+  
+  lfe_coll_rebased_lvl_sz[[as.character(i)]] <- felm(data=full_ind %>% filter(szclass==i),
+                                                     formula = log(lc_l_mean_rebased) ~ 0 + log(collateral_mean_rebased) + log(lprod_mean_rebased) 
+                                                     | year | 0 | year,
+                                                     exactDOF = T)
+}
 
 
 
@@ -202,11 +235,15 @@ regressions <- list(
     lc_l_iqr=list(ols_simple_lc_l_iqr_coll
                   )
   ),
-  plm=list(
-    plm_lc_l_coll
-          ),
+  # plm=list(
+  #   plm_lc_l_coll
+  #         ),
   felm=list(
-            lfe_coll
+            lfe_coll,
+            lfe_coll_rebased_lvl,
+            lfe_coll_rebased_log,
+            lfe_coll_rebased_lvl_sz,
+            lfe_coll_rebased_log_sz
            )
 )
 
@@ -239,7 +276,11 @@ rm(
   ols_simple_ulc_lev,
   ols_simple_ulc_r,
   plm_lc_l_coll,
-  lfe_coll
+  lfe_coll,
+  lfe_coll_rebased_lvl,
+  lfe_coll_rebased_log,
+  lfe_coll_rebased_lvl_sz,
+  lfe_coll_rebased_log_sz
 )
 gc()
 

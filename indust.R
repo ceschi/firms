@@ -81,13 +81,16 @@ full_ind <- full_join(full_ind, temp_ind_bis, by=c('year', 'country', 'szclass')
 # does it kill variation?
 
 # in alternative, use growth rates, 
-# already available in the dataset
+# already available in the dataset -> yield no
+#                                     result whatsoever
 
-# temp <- full_ind %>% group_by(year, country, mac_sector, szclass) %>% 
-#   summarise(coll_mean_re=first(collateral_mean))
-# 
-# temp <- full_join(temp, full_ind, by=c('country', 'year', 'mac_sector', 'szclass')) %>% 
-#   arrange(country, mac_sector, szclass, year)
+full_ind <- full_ind %>% 
+  group_by(country, mac_sector, szclass) %>%
+  mutate(collateral_mean_rebased = collateral_mean/first(collateral_mean)) %>% 
+  mutate(lc_l_mean_rebased = lc_l_mean/first(lc_l_mean)) %>% 
+  mutate(lprod_mean_rebased = lprod_mean/first(lprod_mean)) %>% 
+  mutate(lcl_mean_rebased = lcl_mean/first(lcl_mean))
+
 
 
 
@@ -394,6 +397,8 @@ uncond_rva = full_ind %>% select(year, country, mac_sector, szclass,
 
 
 #### Housekeeping ####
+
+full_ind <- full_ind %>%  ungroup()
 
 rm(new_info, full_ind_2012, temp_ind, temp_ind_bis, nomi, altrinomi)
 gc()
