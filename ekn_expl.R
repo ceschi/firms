@@ -159,15 +159,32 @@ plm_lc_l_coll <- plm(plm_ind,
     effect='twoways' # time and id FE
 )
 
-
+##### FELM PANEL #####
 # using lfe::felm allows for fast, clusterable FE estimation
 # I employ year FE and industry FE, plus country-level St.Err. clustering.
 # Given data aggregation one cannot add the full set of FE: moreover
 # a country FE absorbs a big chunk of the variation, so I decide to
 # exploit this cross country variability and consider it while clustering
-lfe_coll <- felm(data = full_ind, formula = lc_l_mean ~ collateral_mean +as.factor(szclass) + lprod_mean
-     | year + mac_sector | 0 | country + szclass, 
-     exactDOF=T)
+# 
+#                  felm(data, formula, | FE | IV | STERR Clusters) 
+
+# this first FELM does not work as the equation
+# is filled up -> not enough variation
+# lfe_coll <- felm(data = full_ind, formula = lc_l_mean ~ collateral_mean +as.factor(szclass) + lprod_mean
+#      | year + mac_sector | 0 | country:szclass, 
+#      exactDOF=T)
+
+# consider also leverage as financial condition index
+# summing up:
+#     - leverage is strange and varies with FEs
+#     - cash flows is significant but strange
+#     - idem with debt burden
+#     - try with cash holdings and effective interest rate
+#     - max FE here, while cluster is small
+lfe_lev <- felm(data = full_ind,
+                formula = lc_l_mean ~ 0 + leverage_mean + lprod_mean 
+                | year + mac_sector + country + szclass | 0 | year,
+                exactDOF = T)  #%>% summary()
 
 
 # using rebased to first obs variables
@@ -175,19 +192,21 @@ lfe_coll <- felm(data = full_ind, formula = lc_l_mean ~ collateral_mean +as.fact
 # so no need for relative fixed effects
 # Run in log and on levels
 
-lfe_coll_rebased_lvl <- felm(data=full_ind,
+lfe_coll_rebased_lvl <- felm(data=full_ind %>% filter(szclass == 3 | szclass == 2 | szclass == 1),
                              formula = lc_l_mean_rebased ~ 0 + collateral_mean_rebased + lprod_mean_rebased
                              | year | 0 | year,
                              exactDOF = T)
 
 
 
-lfe_coll_rebased_log <- felm(data=full_ind,
+lfe_coll_rebased_log <- felm(data=full_ind %>% filter(szclass == 4 | szclass == 5),
                          formula = log(lc_l_mean_rebased) ~ 0 + log(collateral_mean_rebased) + log(lprod_mean_rebased) 
                          | year | 0 | year,
                          exactDOF = T)
 
-lfe_coll_rebased_lvl_sz <- 1:5 %>% as.character() %>% as.list()
+
+##### Panels cut by size class #####
+lfe_coll_rebased_lvl_sz <- list()
 lfe_coll_rebased_log_sz <- lfe_coll_rebased_lvl_sz
 
 for (i in 1:5){
@@ -195,17 +214,28 @@ for (i in 1:5){
                                                      formula = lc_l_mean_rebased ~ 0 + collateral_mean_rebased + lprod_mean_rebased
                                                      | year | 0 | year,
                                                      exactDOF = T)
-  
-  lfe_coll_rebased_lvl_sz[[as.character(i)]] <- felm(data=full_ind %>% filter(szclass==i),
-                                                     formula = log(lc_l_mean_rebased) ~ 0 + log(collateral_mean_rebased) + log(lprod_mean_rebased) 
+
+  lfe_coll_rebased_log_sz[[as.character(i)]] <- felm(data=full_ind %>% filter(szclass==i),
+                                                     formula = log(lc_l_mean_rebased) ~ 0 + log(collateral_mean_rebased) + log(lprod_mean_rebased)
                                                      | year | 0 | year,
                                                      exactDOF = T)
+
 }
 
 
+lfe_coll_rebased_lvl_fullFE <- felm(data=full_ind,
+                                    formula = lc_l_mean_rebased ~ 0 + collateral_mean_rebased + lprod_mean_rebased
+                                    | year + country + mac_sector + szclass | 0 | year,
+                                    exactDOF = T)
 
 
 
+
+
+
+
+
+##### Collecting all regs in a list #####
 regressions <- list(
   ols=list(
     ulc_mean=list(
@@ -280,7 +310,8 @@ rm(
   lfe_coll_rebased_lvl,
   lfe_coll_rebased_log,
   lfe_coll_rebased_lvl_sz,
-  lfe_coll_rebased_log_sz
+  lfe_coll_rebased_log_sz,
+  i
 )
 gc()
 

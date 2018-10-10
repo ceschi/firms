@@ -54,6 +54,23 @@ instant_pkgs <- function(pkgs) {
   }
 }
 
+
+countNA <- function(data, ...){
+  # preamble 
+  require(tidyverse) # add option to install if not present
+                     # and check for length and class
+  
+  # get names of DF variables without grouping ones
+  # first line generates char vector
+  grouping <- eval(substitute(alist(...)))
+  
+  # these are the remaining variables in the DF
+  check_vars <- setdiff(names(data), as.character(grouping))
+
+
+  return(grouping)
+}
+
 # qcew_data_single <- function(data_dir){
 #   # custom function to download,
 #   # select and merge QCEW data
@@ -335,13 +352,6 @@ instant_pkgs(pkgs)
 ##### Housekeeping ####
 rm(pkgs, instant_pkgs)
 gc()
-
-
-
-
-
-
-
 
 
 

@@ -86,10 +86,16 @@ full_ind <- full_join(full_ind, temp_ind_bis, by=c('year', 'country', 'szclass')
 
 full_ind <- full_ind %>% 
   group_by(country, mac_sector, szclass) %>%
-  mutate(collateral_mean_rebased = collateral_mean/first(collateral_mean)) %>% 
-  mutate(lc_l_mean_rebased = lc_l_mean/first(lc_l_mean)) %>% 
-  mutate(lprod_mean_rebased = lprod_mean/first(lprod_mean)) %>% 
-  mutate(lcl_mean_rebased = lcl_mean/first(lcl_mean))
+  mutate(collateral_mean_rebased = collateral_mean/first(collateral_mean), 
+         lc_l_mean_rebased = lc_l_mean/first(lc_l_mean),
+         lc_mean_rebased = lc_mean/first(lc_mean),
+         lprod_mean_rebased = lprod_mean/first(lprod_mean), 
+         lcl_mean_rebased = lcl_mean/first(lcl_mean),
+         leverage_mean_rebased = leverage_mean/first(leverage_mean),
+         ulc_mean_rebased = ulc_mean/first(ulc_mean),
+         cash_flow_ta_mean_rebased = cash_flow_ta_mean/first(cash_flow_ta_mean),
+         cash_holdings_mean_rebased = cash_holdings_mean/first(cash_holdings_mean),
+         implicit_rate_mean_rebased = implicit_rate_mean/first(implicit_rate_mean))
 
 
 
@@ -399,6 +405,11 @@ uncond_rva = full_ind %>% select(year, country, mac_sector, szclass,
 #### Housekeeping ####
 
 full_ind <- full_ind %>%  ungroup()
+
+full_ind <- full_ind %>% mutate(year = as.factor(year),
+                                szclass = as.factor(szclass),
+                                country = as.factor(country))
+
 
 rm(new_info, full_ind_2012, temp_ind, temp_ind_bis, nomi, altrinomi)
 gc()

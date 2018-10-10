@@ -7,7 +7,7 @@
 
 # set to 0 to mute plots,
 # set to 1 to print plots
-flag___plot = 1
+flag___plot = 0
 
 
 

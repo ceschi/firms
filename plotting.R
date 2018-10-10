@@ -148,6 +148,12 @@ plot_sec_lc_l_iqr <- ggplot(full_ind %>%
   guides(colour=guide_legend(nrow=1, byrow=T))+ylab('LCL IQR')+xlab('Year')+
   ggtitle('Labour cost per Employee: interquartile range; cross country mean, within sector')
 
+# subset of big firms, crosscountry and sector 
+# comaprison in mean TFP
+plot_tfp_big <- ggplot(full_ind %>% filter(szclass == 5) %>% group_by(country),
+                       aes(x = year, y = tfp_mean, colour = country))+
+  geom_line(size = 1, aes(group = country)) + facet_wrap( ~ mac_sector, scales = 'free_y')+ theme_bw()
+
 
 
 plots <- list(
@@ -167,7 +173,8 @@ plots <- list(
   plot_sec_lprod,
   plot_sec_lc_l_iqr,
   plot_sec_ULC_mean,
-  plot_ulc
+  plot_ulc,
+  plot_tfp_big
 )
 
 

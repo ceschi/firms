@@ -75,5 +75,9 @@ full_descr <- full_descr %>% mutate(lcl_mean = lc_mean/l_mean)
 
 full_descr <- full_descr %>%  ungroup()
 
+full_descr <- full_descr %>% mutate(year = as.factor(year),
+                                    country = as.factor(country),
+                                    szclass = as.factor(szclass))
+
 rm(new_info, full_descr_2012, nomi, altrinomi)
 gc()

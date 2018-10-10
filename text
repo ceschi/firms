@@ -1,0 +1,29 @@
+
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: lun, lug 23, 2018 - 11:51:16
+\begin{table}[!htbp] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & lc\_l\_mean \\ 
+\hline \\[-1.8ex] 
+ leverage\_mean & 16.181$^{***}$ \\ 
+  & (0.452) \\ 
+  & \\ 
+ lprod\_mean & 0.416$^{***}$ \\ 
+  & (0.003) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 7,441 \\ 
+R$^{2}$ & 0.547 \\ 
+Adjusted R$^{2}$ & 0.547 \\ 
+Residual Std. Error & 11.962 (df = 7439) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
