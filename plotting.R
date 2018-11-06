@@ -154,6 +154,9 @@ plot_tfp_big <- ggplot(full_ind %>% filter(szclass == 5) %>% group_by(country),
                        aes(x = year, y = tfp_mean, colour = country))+
   geom_line(size = 1, aes(group = country)) + facet_wrap( ~ mac_sector, scales = 'free_y')+ theme_bw()
 
+plot_ridges_lc_l_mean <- ggplot(full_ind, aes(x = lc_l_mean, y = year)) +
+  +     geom_density_ridges()+ theme_ridges() + facet_wrap(~country)
+
 
 
 plots <- list(
@@ -174,8 +177,10 @@ plots <- list(
   plot_sec_lc_l_iqr,
   plot_sec_ULC_mean,
   plot_ulc,
-  plot_tfp_big
+  plot_tfp_big,
+  plot_ridges_lc_l_mean
 )
+
 
 
 

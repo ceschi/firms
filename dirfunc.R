@@ -66,7 +66,11 @@ countNA <- function(data, ...){
   
   # these are the remaining variables in the DF
   check_vars <- setdiff(names(data), as.character(grouping))
-
+### SPLIT BY GROUPS WITH PURRR
+### COUNT ALL
+### COUNT NA
+### MIN YEAR PER COUNTRY, SECTOR
+### MAX YEAR PER COUNTRY, SECTOR
 
   return(grouping)
 }
